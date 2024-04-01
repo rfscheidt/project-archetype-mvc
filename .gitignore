@@ -1,0 +1,42 @@
+# Arquivos compilados
+*.class
+*.jar
+
+# Arquivos de log e cache
+logs/
+*.log
+*.cache
+
+# Diretórios e arquivos de compilação
+bin/
+target/
+
+# Arquivos de configuração
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Arquivos de dependência do Maven
+target/
+!target/
+/target/
+!target/**/
+!*.jar
+!**/target/classes/
+!**/target/test-classes/
+
+# Arquivos gerados pelo Eclipse
+.settings/
+
+# Arquivos de configuração do Spring Boot
+application*.yml
+application*.properties
+
+# Arquivos de configuração do Tomcat
+conf/
+
+# Outros arquivos temporários ou específicos de IDEs
+*.swp
+*.tmp
+*~
