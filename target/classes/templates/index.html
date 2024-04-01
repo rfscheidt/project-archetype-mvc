@@ -1,0 +1,213 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Histórico de Importação</title>
+	<th:block th:insert="~{fragments/scripts :: scripts}"></th:block>
+</head>
+
+<body>
+	<!-- HEADER -->
+    <div th:insert="~{fragments/header :: header}"></div>
+
+	<!-- BODY -->
+	<div class="container my-5">
+		<div class="d-flex justify-content-between align-items-center">
+        	<h2>Products List</h2>
+        	<button class="btn btn-primary add-btn">Add Product</button>
+    	</div>
+		<!-- Tabela de Histórico -->
+		<table class="table">
+			<thead class="thead-light">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Date</th>
+					<th>Description</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- Exemplo de Dados -->
+				<tr th:each="product : ${products}" 
+					    th:data-product-id="${product.id}" th:data-product-name="${product.name}" 
+					    th:data-product-date="${product.date}" th:data-product-description="${product.description}">
+				    <td th:text="${product.id}"></td>
+				    <td th:text="${product.name}"></td>
+				    <td th:text="${product.date}"></td>
+				    <td th:text="${product.description}"></td>
+				    <td>
+				        <button class="btn btn-info btn-sm edit-btn">Edit</button>
+				        <button class="btn btn-success btn-sm show-details-btn">Details</button>
+				        <button class="btn btn-danger btn-sm delete-btn">Delete</button>
+				    </td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	
+	<!-- Details Modal -->
+	<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="detailsModalLabel">Product Details</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <p>ID: <span id="productId"></span></p>
+	                <p>Name: <span id="productName"></span></p>
+	                <p>Date: <span id="productDate"></span></p>
+	                <p>Description: <span id="productDescription"></span></p>
+	            </div>
+	            <div class="modal-footer">
+	                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- Edit Modal-->
+	<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+	    <div class="modal-dialog" role="document">
+	        <div class="modal-content">
+	            <div class="modal-header">
+	                <h5 class="modal-title" id="editModalLabel">Edit Product</h5>
+	                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	                    <span aria-hidden="true">&times;</span>
+	                </button>
+	            </div>
+	            <div class="modal-body">
+	                <!-- Formulário de Edição -->
+	                <form id="editForm">
+	                    <div class="form-group">
+	                        <label for="editId">ID:</label>
+	                        <input type="text" class="form-control" id="editId" readonly>
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="editName">Name:</label>
+	                        <input type="text" class="form-control" id="editName">
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="editDate">Date:</label>
+	                        <input type="text" class="form-control" id="editDate">
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="editDescription">Description:</label>
+	                        <input type="text" class="form-control" id="editDescription">
+	                    </div>
+	                </form>
+	            </div>
+	            <div class="modal-footer">
+	            	<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+	            	<button type="button" class="btn btn-primary" id="saveEditBtn">Save</button>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+	
+	<!-- FOOTER -->
+	<div th:insert="~{fragments/footer :: footer}" class="footer"></div>
+	
+	<!-- ADICIONAL SCRIPTS -->
+	<script>
+		function getFormData() {
+	        var id = document.getElementById("editId").value;
+	        var name = document.getElementById("editName").value;
+	        var date = document.getElementById("editDate").value;
+	        var description = document.getElementById("editDescription").value;
+	
+	        var formData = {
+	            id: id,
+	            name: name,
+	            date: date,
+	            description: description
+	        };
+	
+	        return formData;
+	    }
+	
+	    $(document).ready(function () {
+	        $(".show-details-btn").click(function () {
+	            var productId = $(this).closest("tr").data("product-id");
+	            var productName = $(this).closest("tr").data("product-name");
+	            var productDate = $(this).closest("tr").data("product-date");
+	            var productDescription = $(this).closest("tr").data("product-description");
+	
+	            $("#productId").text(productId);
+	            $("#productName").text(productName);
+	            $("#productDate").text(productDate);
+	            $("#productDescription").text(productDescription);
+	
+	            $("#detailsModal").modal("show");
+	        });
+	        
+	        $('.add-btn').on('click', function() {
+	            $('#editId').val("");
+	            $('#editName').val("");
+	            $('#editDate').val("");
+	            $('#editDescription').val("");
+
+	            $('#editModal').modal('show');
+	        });
+	        
+	        $('.edit-btn').on('click', function() {
+	            var id = $(this).closest('tr').data('product-id');
+	            var name = $(this).closest('tr').data('product-name');
+	            var date = $(this).closest('tr').data('product-date');
+	            var description = $(this).closest('tr').data('product-description');
+
+	            // Preencher os campos da modal com os dados do produto selecionado
+	            $('#editId').val(id);
+	            $('#editName').val(name);
+	            $('#editDate').val(date);
+	            $('#editDescription').val(description);
+
+	            // Exibir a modal de edição
+	            $('#editModal').modal('show');
+	        });
+	        
+	        $('#saveEditBtn').click(function () {
+	        	var formData = getFormData();
+	            console.log(formData);
+	             
+	            $.ajax({
+	                type: "PUT",
+	                url: "/products/update",
+	                contentType: "application/json",
+	                data: JSON.stringify(formData),
+	                success: function () {
+	                	window.location = '/index';
+	                },
+	                error: function () {
+	                    alert("Erro ao editar o produto.");
+	                }
+	            });
+	        });
+
+	        $(".delete-btn").click(function () {
+	            var productId = $(this).closest('tr').data('product-id');
+	            var productName = $(this).closest('tr').data('product-name');
+
+	            if (confirm("Você tem certeza que deseja excluir o produto '" + productName + "'?")) {
+	                $.ajax({
+	                    type: "DELETE",
+	                    url: "/products/" + productId,
+	                    success: function () {
+	                        window.location = '/index';
+	                    },
+	                    error: function () {
+	                        alert("Erro ao excluir o produto.");
+	                    }
+	                });
+	            }
+	        });
+	        
+	    });
+	</script>
+</body>
+
+</html>

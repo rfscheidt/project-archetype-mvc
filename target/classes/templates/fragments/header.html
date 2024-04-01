@@ -1,0 +1,31 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+	<div th:fragment="header">
+		<div class="container my-5">
+			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+				<a class="navbar-brand" href="#"> <img src="https://static.significados.com.br/foto/coca-cola-cke.jpg" width="150" height="auto" alt="AG Capital">
+				</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNav">
+					<ul class="navbar-nav ml-auto">
+						<li class="nav-item active"><a class="nav-link" href="/index">Products</a></li>
+						<li class="nav-item"><a class="nav-link" href="/type">Types</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Partners</a></li>
+						<li class="nav-item"><a class="nav-link" href="#">Contracts</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+</body>
+</html>
